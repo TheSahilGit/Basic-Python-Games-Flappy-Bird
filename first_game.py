@@ -26,7 +26,7 @@ game_display = pygame.display.set_mode((display_width, display_height))         
 pygame.display.set_caption("CAR CRASH 2D")                                              #Giving a name to the enviournment.
 clock = pygame.time.Clock()                                                     #Defining the clock of the game.
 car_image = pygame.image.load('car_paint_transparent.png')                      #Importing the image and assigning it to a variable called car_image.
-
+                                                                      # ** File with same name in in the repasitory. Please download that too ** 
 def dodged_things(count) :                                                      #Here we want to enter a counter that says how many blocks we have dodged.
     font= pygame.font.SysFont(None,25)
     text= font.render(("Dodged: " + str(count)),True, black)
