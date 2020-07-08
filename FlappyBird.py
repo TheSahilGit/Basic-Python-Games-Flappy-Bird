@@ -9,8 +9,8 @@ import time
 
 pygame.init()
 
-display_width = 500
-display_height = 500
+display_width = 450
+display_height = 600
 
 black = (0, 0, 0)
 white = (255, 255, 255)
@@ -18,24 +18,29 @@ red = (255, 0, 0)
 whiten = (230, 230, 250)
 color1 = (78, 138, 211)
 color2 = (154, 3, 33)
-color3=(242,238,29)
+color3 = (242, 238, 29)
+
+pygame.mixer.music.load('background.mp3')
+# pygame.mixer.music.load('bell.mp3')
+# pygame.mixer.music.load('gameOver.mp3')
 
 screen = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption("FLAPPY BIRD")
 clock = pygame.time.Clock()
 
 
+
 def bird(x, y):
     w = 10
     h = 10
-    pygame.draw.ellipse(screen, color3, [x, y, w, h])
+    pygame.draw.ellipse(screen, color3, [int(x), int(y), int(w), int(h)])
 
 
 def block(x, y, h, w, blank):
     yd = y + h + blank
     hd = display_height - yd
-    pygame.draw.rect(screen, color2, [x, y, w, h])
-    pygame.draw.rect(screen, color2, [x, yd, w, hd])
+    pygame.draw.rect(screen, color2, [int(x), int(y), int(w), int(h)])
+    pygame.draw.rect(screen, color2, [int(x), int(yd), int(w), int(hd)])
 
 
 def score(count):
@@ -60,10 +65,13 @@ def messageDisplay(text, posX, posY, size):
 
 
 def crash(count):
-    messageDisplay("* YOU CRASHED * " + " Final Score: " + str(count), display_width/2., display_height/2., size=30)
+    messageDisplay("* You Crashed  * " + " Final Score: " + str(count), display_width/2., display_height/2., size=30)
 
 
 def gameLoop():
+    pygame.mixer.music.play(-1)
+    fps = 70
+
     birdXpos = display_width / 8.0
     birdYpos = display_height / 2.
     birdYvel = 0
@@ -99,11 +107,14 @@ def gameLoop():
 
         if blockXpos + blockWidth < 0:
             blockXpos = display_width + 10.
+            fps += 2
             blockHeight = np.random.randint(0, display_height / 2.)
             blankSpace = np.random.randint(50, 200)
 
         if blockXpos < birdXpos < blockXpos + blockWidth:
             count += 0.1
+            #pygame.mixer.music.play(0)
+
 
         score(round(count))
 
@@ -111,14 +122,17 @@ def gameLoop():
                 blockXpos < birdXpos < blockXpos + blockWidth and birdYpos < blockYpos + blockHeight or \
                 blockXpos < birdXpos < blockXpos + blockWidth and birdYpos > blockYpos + blockHeight + blankSpace:
 
+            pygame.mixer.music.stop()
+            # pygame.mixer.music.play(-1)
             crash(round(count))
+
 
 
         bird(birdXpos, birdYpos)
 
         block(blockXpos, blockYpos, blockHeight, blockWidth, blankSpace)
         pygame.display.update()
-        clock.tick(70)
+        clock.tick(fps)
 
 
 gameLoop()
